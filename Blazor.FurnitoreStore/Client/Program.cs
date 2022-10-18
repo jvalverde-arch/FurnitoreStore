@@ -20,5 +20,7 @@ builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 await builder.Build().RunAsync();
