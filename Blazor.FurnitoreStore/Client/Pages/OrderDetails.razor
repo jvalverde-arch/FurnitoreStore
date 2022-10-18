@@ -1,0 +1,78 @@
+﻿@page "/orderDetails"
+@inject IProductCategoryService ProductCategoryService
+@inject IProductService ProductService
+
+<h3>OrderDetails</h3>
+@if (productCategories!=null && Order !=null)
+{
+    <EditForm Model="@Order">
+        <label>Categories</label>
+        @*<InputSelect class="col-sm-5" @bind-Value="@Order.ProductCategoryId" >
+            @foreach (var item in productCategories)
+           {
+               <option value="@item.Id" >@item.Name</option>
+           }
+        </InputSelect>*@
+        
+        <InputSelect class="form-control col-sm-5" 
+            Value="@Order.ProductCategoryId"
+                 ValueChanged="@((int productCategoryId)=>ProductCategoryHasChanged(productCategoryId))"
+                   ValueExpression="@(()=>Order.ProductCategoryId)">
+            
+            @foreach (var item in productCategories)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </InputSelect>
+        <label>Products</label>
+        <InputSelect class="form-control col-sm-5" @bind-Value="@productId">
+            @foreach (var item in products)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </InputSelect>
+    </EditForm>
+}
+else
+{
+    <p><em>Loading....</em></p>
+}
+@code {
+    public Order Order;
+    public IEnumerable<ProductCategory> productCategories;
+    public IEnumerable<Product> products;
+    public string Message { get; set; }
+    public int productId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            //Order = new Order() ;
+            Order = new Order() { ProductCategoryId=1};
+            productCategories = await ProductCategoryService.GetProductCategories();
+            await LoadProducts(Order.ProductCategoryId);
+        }
+        catch (Exception e)
+        {
+
+            Message = "Ha ocurrido un error..." + e.Message;
+        }
+    }
+
+    protected async Task ProductCategoryHasChanged(int productCategoryId)
+    {
+        Order.ProductCategoryId = productCategoryId;
+
+        if (Order.ProductCategoryId>0)
+        {
+            await LoadProducts(Order.ProductCategoryId);
+        }
+    }
+
+    private async Task LoadProducts (int productCategoryId)
+    {
+        //LLamar al servicio
+        products = await ProductService.GetByCategory(productCategoryId);
+    }
+}
