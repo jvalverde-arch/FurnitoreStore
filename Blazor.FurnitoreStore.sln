@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.FurnitoreStore.Server", "Blazor.FurnitoreStore\Server\Blazor.FurnitoreStore.Server.csproj", "{C6B38881-1B2A-4CCE-A098-A3C73E7AAD7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.FurnitoreStore.Server", "Blazor.FurnitoreStore\Server\Blazor.FurnitoreStore.Server.csproj", "{C6B38881-1B2A-4CCE-A098-A3C73E7AAD7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.FurnitoreStore.Client", "Blazor.FurnitoreStore\Client\Blazor.FurnitoreStore.Client.csproj", "{7437E5FA-ED87-4FF9-92F2-477C4F408BC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.FurnitoreStore.Client", "Blazor.FurnitoreStore\Client\Blazor.FurnitoreStore.Client.csproj", "{7437E5FA-ED87-4FF9-92F2-477C4F408BC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.FurnitoreStore.Shared", "Blazor.FurnitoreStore\Shared\Blazor.FurnitoreStore.Shared.csproj", "{8A8CC348-AE97-4674-AA2C-CB24F196D986}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.FurnitoreStore.Shared", "Blazor.FurnitoreStore\Shared\Blazor.FurnitoreStore.Shared.csproj", "{8A8CC348-AE97-4674-AA2C-CB24F196D986}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.FurnitoreStore.Repositories", "Blazor.FurnitoreStore.Repositories\Blazor.FurnitoreStore.Repositories.csproj", "{FF0F1BEF-C9A0-4817-AA7F-3A9D30352FC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.FurnitoreStore.Repositories", "Blazor.FurnitoreStore.Repositories\Blazor.FurnitoreStore.Repositories.csproj", "{FF0F1BEF-C9A0-4817-AA7F-3A9D30352FC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using Blazor.FurnitoreStore.Repositories;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,7 @@ builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
 
 
 var app = builder.Build();

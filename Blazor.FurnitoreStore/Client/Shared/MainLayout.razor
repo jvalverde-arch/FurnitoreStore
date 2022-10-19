@@ -1,5 +1,15 @@
 ﻿@inherits LayoutComponentBase
 
+<MudThemeProvider />
+<MudDialogProvider
+    FullWidth="true"
+    MaxWidth="MaxWidth.Large"
+    CloseButton="true"
+    DisableBackdropClick="true"
+    Position="DialogPosition.Center"
+        />
+<MudSnackbarProvider />
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />

@@ -1,10 +1,12 @@
 ﻿using Blazor.FurnitoreStore.Repositories;
 using Blazor.FurnitoreStore.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blazor.FurnitoreStore.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
@@ -17,9 +19,9 @@ namespace Blazor.FurnitoreStore.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Blazor.FurnitoreStore.Shared.Client>> GetClients()
+        public async Task<IEnumerable<Blazor.FurnitoreStore.Shared.Client>> Get()
         {
-            return await _clientRepository.GetClients();
+            return await _clientRepository.GetALl();
         }
     }
 }

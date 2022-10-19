@@ -9,7 +9,7 @@ namespace Blazor.FurnitoreStore.Repositories
 {
     public  interface IClientRepository
     {
-        Task<IEnumerable<Client>>  GetClients();
+        Task<IEnumerable<Client>>  GetALl();
 
     }
 }

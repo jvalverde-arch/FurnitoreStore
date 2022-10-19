@@ -18,7 +18,8 @@ namespace Blazor.FurnitoreStore.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<Client>> GetClients()
+      
+        public async Task<IEnumerable<Client>> GetALl()
         {
             var sql = @"Select Id, FirstName, LastName, BirthDate, Phone, Address
                         From Clients";

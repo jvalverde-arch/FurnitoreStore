@@ -1,0 +1,108 @@
+﻿@inject IProductCategoryService ProductCategoryService
+@inject IProductService ProductService
+
+<MudDialog>
+    <TitleContent>Product Details</TitleContent>
+    <DialogContent>
+        <EditForm Model="@product">
+            <div class="card">
+                <div class="card-body"
+                        <div class="container">
+                             <div class="row">
+                                   <div class="col-md-6 mb-3">
+                                         <label for="">Category</label>
+                                             @*<InputSelect class="form-control col-sm-5"*@
+                                              <InputSelect class="form-control"
+                                                Value="@product.ProductCategoryId"
+                                                     ValueChanged="@((int productCategoryId)=>ProductCategoryHasChanged(productCategoryId))"
+                                                       ValueExpression="@(()=>product.ProductCategoryId)">
+
+                                    @foreach (var item in productCategories)
+                                    {
+                                                                 <option value="@item.Id">@item.Name</option>
+                                    }
+                                               </InputSelect>
+                                   </div>
+                                   <div class="col-md-6 mb-3">
+                                       <label for="">Product</label>
+                                        @*<InputSelect class="form-control col-sm-5" @bind-Value="@product.Id">*@
+                                            <InputSelect class="form-control" @bind-Value="@product.Id">
+                                    @foreach (var item in products)
+                                    {
+                                                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                        </InputSelect>
+
+                                   </div>
+                             </div>
+                              <div class="row">
+                                   <div class="col-md-6 mb-3">
+                                        
+                                         <MudNumericField Disabled="true" Label="Price" @bind-Value="@product.Price" Variant="Variant.Outlined"/>
+                                   </div>
+                                   <div class="col-md-6 mb-3">
+                                       <MudNumericField  @bind-Value="@product.Quantity" Label="Quantity" Variant="Variant.Outlined"/>
+                                   </div>
+                             </div>
+                        </div>
+                </div>
+            </div>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton OnClick="AddProduct" Color="Color.Primary">Add</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    public Product product = new Product();
+    public IEnumerable<ProductCategory> productCategories = new List<ProductCategory>();
+    public IEnumerable<Product> products = new List<Product>();
+    public string Message { get; set; }
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog{ get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            productCategories = await ProductCategoryService.GetProductCategories();
+            await LoadProducts(product.ProductCategoryId);
+        }
+        catch (Exception e)
+        {
+
+            Message = "Error..." + e.Message;
+        }
+
+    }
+
+    protected async Task ProductCategoryHasChanged(int productCategoryId)
+    {
+        product.ProductCategoryId = productCategoryId;
+
+        if (product.ProductCategoryId > 0)
+        {
+            await LoadProducts(product.ProductCategoryId);
+        }
+    }
+
+    private async Task LoadProducts(int productCategoryId)
+    {
+        ////LLamar al servicio
+        products = await ProductService.GetByCategory(productCategoryId);
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+    private void AddProduct()
+    {
+        MudDialog.Close(DialogResult.Ok(product));
+    }
+    
+}

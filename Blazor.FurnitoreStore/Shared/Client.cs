@@ -14,7 +14,7 @@ namespace Blazor.FurnitoreStore.Shared
 
         public string LastName { get; set; }
 
-        public DateOnly BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public string Phone { get; set; }
 
