@@ -1,4 +1,5 @@
 ﻿@page "/orderDetails"
+@page "/orderDetalis/{id}"
 
 @inject IClientService ClientService
 @inject IOrderService OrderService
@@ -127,6 +128,7 @@ else
     {
         try
         {
+            
             //Order = new Order() ;
             order = new Order()
                 {

@@ -3,7 +3,28 @@
 
 @if(orders!=null && orders.Any())
 {
-
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+        FilterMode="FilterMode.Advanced" AllowSorting="true" AllowPaging="true" Data="@orders" 
+        TItem="Order" ColumnWidth="100px" > 
+        <Columns>
+            <RadzenGridColumn TItem="Order" Property="OrderNumber" Title="Number"/>
+            <RadzenGridColumn TItem="Order" Property="ClientName" Title="Client Name" />
+            <RadzenGridColumn TItem="Order" Property="OrderDate" Title="Order Date" />
+            <RadzenGridColumn TItem="Order" Property="DeliveryDate" Title="Delivery Date" />
+            <RadzenGridColumn TItem="Order" Property="Total" Title="Total" />
+            <RadzenGridColumn TItem="Order"  Title="Edit" >
+                <Template Context="data">
+                    <RadzenLink Path="@($"/orderdetails/{data.Id}")" Text="Edit"></RadzenLink>
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Order" Title="Delete">
+                <Template Context="data">
+                    <RadzenLink Path="@($"/orderdelete/{data.Id}")" Text="Delete"></RadzenLink>
+                </Template>
+            </RadzenGridColumn>
+           
+        </Columns>
+    </RadzenGrid>
 }
 else
 {
@@ -23,8 +44,11 @@ else
         }
         catch (Exception e)
         {
-            
-           Mensaje = "Error..." + e.Message
-        }
+
+            Mensaje = "Error..." + e.Message;
+        };
     }
+
+    
+    
 }
