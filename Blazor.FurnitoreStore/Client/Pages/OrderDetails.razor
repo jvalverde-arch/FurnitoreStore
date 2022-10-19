@@ -55,7 +55,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="">Total</label>
-                            <InputNumber class="form-control" @bind-Value="@order.Total" />
+                            @*<InputNumber class="form-control"  @bind-Value="@order.Total" />*@
+                            <input  type="text" class="form-control" readonly="readonly" value="@order.Total.ToString("C")"/>
                         </div>
 
 
@@ -75,6 +76,34 @@
             </div>
         </div>
 
+        @if(order.Products!=null && order.Products.Any() )
+        {
+            <MudTable Items="@order.Products" Hover="true" Breakpoint="Breakpoint.Sm">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6" >Products</MudText>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                    <MudTh>Price</MudTh>
+                    <MudTh>Quantiy</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate Context="ProductContext">
+                    <MudTd DataLabel="Name">@ProductContext.Name</MudTd>
+                     <MudTd DataLabel="price">@ProductContext.Price</MudTd>
+                      <MudTd DataLabel="Quantity">@ProductContext.Quantity</MudTd>
+                    @*<MudTd DataLabel=""></MudTd>*@
+                    <MudTd DataLabel="">
+                        <MudFab OnClick="@(()=>RemoveProduct(ProductContext.Id))"
+                        Color="Color.Secondary"
+                        Icon="@Icons.Material.Filled.Delete"
+                        >
+                            
+                        </MudFab>
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
 
 
 
@@ -101,7 +130,7 @@ else
             //Order = new Order() ;
             order = new Order()
                 {
-
+                    OrderNumber = await OrderService.GetNextNumber(),
                     DeliveryDate = DateTime.Now,
                     OrderDate = DateTime.Now.AddDays(7)
                 };
@@ -152,5 +181,10 @@ else
 
         }
 
+    }
+
+    protected async Task RemoveProduct(int productId)
+    {
+        order.Products.RemoveAll(p => p.Id == productId);
     }
 }

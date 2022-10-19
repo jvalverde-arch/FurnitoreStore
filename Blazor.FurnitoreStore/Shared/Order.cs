@@ -19,7 +19,22 @@ namespace Blazor.FurnitoreStore.Shared
 
         public DateTime DeliveryDate { get; set; }
 
-        public decimal Total { get; set; }
+        //public decimal Total { get; set; }
+
+        public decimal Total {
+
+            get
+            {
+                decimal sum = 0;
+                if (Products!=null && Products.Any())
+                {
+                    sum = Products.Sum(p => (p.Price * p.Quantity));
+                }
+                return sum;
+            }
+        
+        }
+        public string  ClientName { get; set; }
 
         public List<Product> Products { get; set; }
 

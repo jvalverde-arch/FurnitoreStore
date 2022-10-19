@@ -18,6 +18,9 @@ namespace Blazor.FurnitoreStore.Repositories
         {
             _dbConnection = dbConnection;
         }
+       
+
+       
 
         public async Task<IEnumerable<ProductCategory>> GetAll()
         {
@@ -28,11 +31,20 @@ namespace Blazor.FurnitoreStore.Repositories
         }
         public async Task<IEnumerable<Product>> GetByCategory(int productCategoryId)
         {
-            var sql = @"Select Id as Id, Name as Name, Price, CategoryId
+            var sql = @"Select Id as Id, Name as Name, Price, CategoryId as ProductCategoryId
                         From Products
                         where CategoryId = @Id ";
 
             return await _dbConnection.QueryAsync<Product>(sql, new {Id= productCategoryId });
+        }
+
+        public async Task<Product> GetDetails(int productId)
+        {
+            var sql = @"Select Id as Id, Name as Name, Price, CategoryId as ProductCategoryId
+                        From Products
+                        where Id = @Id ";
+
+            return await _dbConnection.QueryFirstOrDefaultAsync<Product>(sql, new { Id = productId });
         }
     }
 }

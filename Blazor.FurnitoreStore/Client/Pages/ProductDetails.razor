@@ -1,5 +1,6 @@
 ﻿@inject IProductCategoryService ProductCategoryService
 @inject IProductService ProductService
+@inject ISnackbar SnackBar
 
 <MudDialog>
     <TitleContent>Product Details</TitleContent>
@@ -26,7 +27,10 @@
                                    <div class="col-md-6 mb-3">
                                        <label for="">Product</label>
                                         @*<InputSelect class="form-control col-sm-5" @bind-Value="@product.Id">*@
-                                            <InputSelect class="form-control" @bind-Value="@product.Id">
+                                            <InputSelect class="form-control" Value="@product.Id"
+                                                ValueChanged="@((int productId)=>ProductHasChanged(productId))"
+                                                ValueExpression="@(()=>product.Id)"
+                                            >
                                     @foreach (var item in products)
                                     {
                                                                         <option value="@item.Id">@item.Name</option>
@@ -69,8 +73,17 @@
     {
         try
         {
+            //productCategories = await ProductCategoryService.GetProductCategories();
+            //await LoadProducts(product.ProductCategoryId);
+
             productCategories = await ProductCategoryService.GetProductCategories();
-            await LoadProducts(product.ProductCategoryId);
+
+            if (productCategories != null && productCategories.Any())
+            {
+                product.ProductCategoryId = productCategories.FirstOrDefault().Id;
+                await LoadProducts(product.ProductCategoryId);
+            }
+
         }
         catch (Exception e)
         {
@@ -78,6 +91,12 @@
             Message = "Error..." + e.Message;
         }
 
+    }
+
+    protected async Task ProductHasChanged(int productId)
+    {
+        if (productId >0)
+            product = await ProductService.GetDeails(productId);
     }
 
     protected async Task ProductCategoryHasChanged(int productCategoryId)
@@ -92,8 +111,16 @@
 
     private async Task LoadProducts(int productCategoryId)
     {
-        ////LLamar al servicio
+        //////LLamar al servicio
+        //products = await ProductService.GetByCategory(productCategoryId);
+
         products = await ProductService.GetByCategory(productCategoryId);
+
+        if (products!=null & products.Any())
+        {
+            product = await ProductService.GetDeails(products.FirstOrDefault().Id);
+        }
+
     }
 
     private void Cancel()
@@ -102,6 +129,8 @@
     }
     private void AddProduct()
     {
+        //SnackBar.Add("Product added", Severity.Success);
+        SnackBar.Add("Product added", Severity.Success, a=>a.VisibleStateDuration=50);
         MudDialog.Close(DialogResult.Ok(product));
     }
     

@@ -1,0 +1,30 @@
+﻿@page "/"
+@inject IOrderService OrderService
+
+@if(orders!=null && orders.Any())
+{
+
+}
+else
+{
+    <p><em>Loading...</em></p>
+}
+
+@code {
+    public IEnumerable<Order> orders;
+
+    public string Mensaje { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            orders = await OrderService.GetAll();
+        }
+        catch (Exception e)
+        {
+            
+           Mensaje = "Error..." + e.Message
+        }
+    }
+}
