@@ -1,14 +1,18 @@
 ﻿@page "/orderDetails"
-
+@page "/orderDetails/{id:int}"
+@inject IProductCategoryService ProductCategoryService
+@inject IProductService ProductService
 @inject IClientService ClientService
 @inject IOrderService OrderService
-@inject NavigationManager NavigationManager
 @inject IDialogService DialogService
+@inject NavigationManager NavigationManager
 @attribute [Authorize]
 
 @if (order != null && clients!=null)
 {
-    <EditForm Model="@order" OnValidSubmit="SaveOrder">
+    <EditForm Model="@order" OnValidSubmit="SaveOrder" >
+        <DataAnnotationsValidator/>
+        
         <div class="card">
             <h5 class="card-header">Order Details</h5>
             <div class="card-body">
@@ -17,9 +21,10 @@
                         <div class="col-md-4 mb-3">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <input type="submit" class="btn btn-success" value="Save" @onclick="SaveOrder" />
+                            <input type="submit" class="btn btn-success" value="Save" @onclick="SaveOrder"  />
                             <input type="button" class="btn btn-secondary" value="Cancel" @onclick="Cancel" />
-
+                           
+                            <ValidationSummary Model="@order" ></ValidationSummary>
                         </div>
                         <div class="col-md-4 mb-3">
                         </div>
@@ -28,6 +33,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="">Number</label>
                             <InputNumber class="form-control" @bind-Value="@order.OrderNumber" />
+                            <ValidationMessage For="@(() => order.OrderNumber)" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="">Order Date</label>
@@ -122,27 +128,34 @@ else
     public IEnumerable<Client> clients;
     public string Message { get; set; }
 
+    [Parameter]
+    public int id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            
-            //Order = new Order() ;
-            order = new Order()
-                {
-                    OrderNumber = await OrderService.GetNextNumber(),
-                    DeliveryDate = DateTime.Now,
-                    OrderDate = DateTime.Now.AddDays(7)
-                };
 
+            if (id > 0)
+            {
+                order = await OrderService.GetDetails(id);
+            }
+            else
+            {
+                order = new Order()
+                    {
+                        OrderNumber = await OrderService.GetNextNumber(),
+                        ProductCategoryId = 1,
+                        OrderDate = DateTime.Today,
+                        DeliveryDate = DateTime.Today.AddDays(7)
+                    };
+            }
 
             clients = await ClientService.GetAll();
         }
         catch (Exception e)
         {
-
-            Message = "Ha ocurrido un error..." + e.Message;
+            Message = "There was an error..." + e.Message;
         }
     }
 
@@ -152,6 +165,8 @@ else
 
     protected async Task SaveOrder()
     {
+     
+
         await OrderService.SaveOrder(order);
         NavigateToHome();
     }

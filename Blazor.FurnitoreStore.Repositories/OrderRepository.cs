@@ -19,6 +19,14 @@ namespace Blazor.FurnitoreStore.Repositories
             _dbConnection = dbConnection;
         }
 
+        public async Task DeleteOrder(int id)
+        {
+            var sql = @" DELETE FROM Orders WHERE Id = @Id ";
+
+            await _dbConnection.ExecuteAsync(sql,
+                            new { Id = id });
+        }
+
         public async Task<IEnumerable<Order>> GetAll()
         {
             var sql = @"select 
@@ -29,6 +37,21 @@ namespace Blazor.FurnitoreStore.Repositories
                         ";
 
             return await _dbConnection.QueryAsync<Order>(sql, new { });
+        }
+
+        public async Task<Order> GetDetails(int id)
+        {
+            var sql = @" SELECT Id
+	                           ,OrderNumber
+	                           ,ClientId
+	                           ,OrderDate
+	                           ,DeliveryDate
+	                           ,Total	                          
+                        FROM Orders 
+	                    WHERE Id = @Id ";
+
+            return await _dbConnection.QueryFirstOrDefaultAsync<Order>(sql,
+                new { Id = id });
         }
 
         public async Task<int> GetNextId()
@@ -77,6 +100,30 @@ namespace Blazor.FurnitoreStore.Repositories
 
             return result > 0;
 
+        }
+
+        public async Task<bool> UpdateOrder(Order order)
+        {
+            var sql = @"
+                        UPDATE Orders 
+                            SET ClientId = @ClientId, 
+                                OrderDate =  @OrderDate, 
+                                DeliveryDate = @DeliveryDate
+                        WHERE Id = @Id
+                        ";
+
+            var result = await _dbConnection.ExecuteAsync(sql,
+                new
+                {
+                    order.OrderNumber,
+                    order.ClientId,
+                    order.OrderDate,
+                    order.DeliveryDate,
+                    order.Total,
+                    order.Id
+                });
+
+            return result > 0;
         }
     }
 }

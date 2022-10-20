@@ -19,7 +19,7 @@
             </RadzenGridColumn>
             <RadzenGridColumn TItem="Order" Title="Delete">
                 <Template Context="data">
-                    <RadzenLink Path="@($"/orderdelete/{data.Id}")" Text="Delete"></RadzenLink>
+                    <RadzenLink @onclick="@(args => Delete(data.Id))" Text="Delete"></RadzenLink>
                 </Template>
             </RadzenGridColumn>
            
@@ -32,7 +32,8 @@ else
 }
 
 @code {
-    public IEnumerable<Order> orders;
+    //public IEnumerable<Order> orders;
+    public List<Order> orders;
 
     public string Mensaje { get; set; }
 
@@ -40,7 +41,8 @@ else
     {
         try
         {
-            orders = await OrderService.GetAll();
+            //orders = await OrderService.GetAll();
+            orders = (List<Order>) await OrderService.GetAll();
         }
         catch (Exception e)
         {
@@ -48,7 +50,16 @@ else
             Mensaje = "Error..." + e.Message;
         };
     }
+     protected async Task Delete(int id)
+    {
+        await OrderService.DeleteOrder(id);
+        orders.RemoveAll(p => p.Id == id);
+    }
+    
+    
 
-    
-    
+   
+
+   
+
 }

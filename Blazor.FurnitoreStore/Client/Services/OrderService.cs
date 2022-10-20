@@ -24,15 +24,19 @@ namespace Blazor.FurnitoreStore.Client.Services
 
         public async Task SaveOrder(Order order)
         {
-            if (order.Id ==0)
-            {
+            if (order.Id == 0)
                 await _httpClient.PostAsJsonAsync<Order>($"api/order/", order);
-            }
             else
-            {
-                //invoke update
-            }
-                    
+                await _httpClient.PutAsJsonAsync<Order>($"api/order/{order.Id}", order);
+        }
+        public async Task<Order> GetDetails(int id)
+        {
+            return await _httpClient.GetFromJsonAsync<Order>($"api/order/{id}");
+        }
+
+        public async Task DeleteOrder(int id)
+        {
+            await _httpClient.DeleteAsync($"api/order/{id}");
         }
     }
 }

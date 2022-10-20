@@ -8,7 +8,7 @@ using System.Transactions;
 namespace Blazor.FurnitoreStore.Server.Controllers
 {
 
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -62,6 +62,37 @@ namespace Blazor.FurnitoreStore.Server.Controllers
 
             return NoContent();
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] Order order)
+        {
+            if (order == null)
+                return BadRequest();
+
+            if (order.OrderNumber == 0)
+                ModelState.AddModelError("OrderNumber", "Order number can't be empty");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await _orderRepository.UpdateOrder(order);
+
+                await _orderProductRepository.DeleteOrderProductByOrder(order.Id);
+
+                if (order.Products != null && order.Products.Any())
+                {
+                    foreach (var prd in order.Products)
+                    {
+                        await _orderProductRepository.InsertOrderProduct(order.Id, prd);
+                    }
+                }
+
+                scope.Complete();
+            }
+
+            return NoContent();
+        }
 
         [HttpGet("getnextnumber")]
         public async Task<int> GetNextNumber()
@@ -72,8 +103,32 @@ namespace Blazor.FurnitoreStore.Server.Controllers
         [HttpGet]
         public async Task<IEnumerable<Order>> Get()
         {
-            return await _orderRepository.GetAll();
+            var orders = await _orderRepository.GetAll();
+
+            foreach (var item in orders)
+            {
+                item.Products = (List<Product>)await _orderProductRepository.GetByOrder(item.Id);
+            }
+
+            return orders;
         }
 
+        [HttpGet("{id}")]
+        public async Task<Order> GetDetails(int id)
+        {
+            var order = await _orderRepository.GetDetails(id);
+            var products = await _orderProductRepository.GetByOrder(id);
+
+            if (order != null)
+                order.Products = products.ToList();
+
+            return order;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task Delete(int id)
+        {
+            await _orderRepository.DeleteOrder(id);
+        }
     }
 }
