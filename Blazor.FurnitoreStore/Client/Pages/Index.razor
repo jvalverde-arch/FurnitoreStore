@@ -1,9 +1,18 @@
-﻿
+﻿@page "/"
+<div>
+    <select @onchange="onChange">
+        <option value="@nameof(CheckComponent)">@nameof(CheckComponent)</option>
+        <option value="@nameof(TextComponent)">@nameof(TextComponent)</option>
+    </select>
+</div>
+<DynamicComponent Type="tipo"/>
+@code{
+    Type tipo = typeof(CheckComponent);
+    string namespaceComponent = "Blazor.FurnitoreStore.Client.Pages.";
+    private void onChange (ChangeEventArgs e)
+    {
+        CheckComponent componente;
 
-<PageTitle>Index</PageTitle>
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+        tipo = Type.GetType ($"{namespaceComponent}{e.Value.ToString()}");
+    }
+}

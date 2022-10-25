@@ -1,0 +1,15 @@
+﻿@page "/dynamic"
+
+<DynamicComponent Type= "tipo" Parameters="diccionario"/>
+
+@code {
+    Type tipo  = typeof(ClientDetails);
+    public static Client client = new Client()
+        {
+            FirstName = "Javier",
+            LastName = "Valverde",
+            BirthDate = DateTime.Now,
+            CreationDate = DateTime.Now
+        };
+    IDictionary<string, object> diccionario = new Dictionary<string, object>() { { "cliente", client} };
+}

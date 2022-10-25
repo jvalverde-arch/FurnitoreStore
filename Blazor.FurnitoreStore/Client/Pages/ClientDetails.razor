@@ -1,0 +1,167 @@
+﻿@page "/clientdetails"
+@inject NavigationManager NavigationManager
+ @using Microsoft.Extensions.Logging
+@inject ILogger<Client> Logger    
+
+@if(client!=null)
+{
+
+    @*<EditForm Model="@client" OnValidSubmit="@SaveClient" >*@
+        <EditForm Model="@client" OnValidSubmit="@SaveClient" >
+         <DataAnnotationsValidator/>
+        <div class="card">
+            <h5 class="card-header">Order Details</h5>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="submit" class="btn btn-success" value="Save"  />
+                            <input type="button" class="btn btn-secondary" value="Cancel" @onclick="Cancel" />
+
+                        </div>
+                        <div class="col-md-4 mb-3">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">First Name</label>
+                            <InputText class="form-control" @bind-Value="@client.FirstName" />
+                             <ValidationMessage For="@(() => client.FirstName)" />
+                        </div>
+                        
+                    </div>
+                    
+                     <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Last Name</label>
+                            <InputText class="form-control" @bind-Value="@client.LastName" />
+                             <ValidationMessage For="@(() => client.LastName)" />
+                        </div>
+                        
+                    </div>
+                     <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Birthdate</label>
+                            <InputDate class="form-control" @bind-Value="@client.BirthDate" />
+                             <ValidationMessage For="@(() => client.BirthDate)" />
+                        </div>
+                        
+                    </div>
+                     <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Creatin Date</label>
+                            <InputDate class="form-control" @bind-Value="@client.CreationDate" />
+                             <ValidationMessage For="@(() => client.CreationDate)" />
+                        </div>
+                        
+                    </div>
+                         <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Phone</label>
+                            <InputText class="form-control" @bind-Value="@client.Phone" />
+                             <ValidationMessage For="@(() => client.Phone)" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Address</label>
+                            <InputText class="form-control" @bind-Value="@client.Address" />
+                             <ValidationMessage For="@(() => client.Address)" />
+                        </div>
+
+                    </div
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Email</label>
+                            <InputText class="form-control" @bind-Value="@client.Email" />
+                             <ValidationMessage For="@(() => client.Email)" />
+                        </div>
+
+                    </div>
+                     <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Edad</label>
+                            <InputNumber class="form-control" @bind-Value="@client.Age" />
+                             <ValidationMessage For="@(() => client.Age)" />
+                        </div>
+
+                    </div>
+
+                     <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Password</label>
+                            <InputText class="form-control" type="password" @bind-Value="@client.Password" />
+                             <ValidationMessage For="@(() => client.Password)" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Password Confirmation</label>
+                            <InputText class="form-control" type="password" @bind-Value="@client.RePassword" />
+                             <ValidationMessage For="@(() => client.RePassword)" />
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Credit Card</label>
+                            <InputText class="form-control" @bind-Value="@client.CreditCard" />
+                             <ValidationMessage For="@(() => client.CreditCard)" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
+else
+{
+    <p><em>Loaging ....</em></p>
+}
+
+@code {
+    [Parameter]
+    public  Client cliente { get; set; }
+
+
+
+
+    Blazor.FurnitoreStore.Shared.Client client;
+
+    private EditContext editContext;
+    protected async override Task OnInitializedAsync()
+    {
+        client = cliente != null ? cliente : new Client
+        {
+            CreationDate = DateTime.Now,
+            BirthDate = DateTime.Now
+        };
+
+        editContext = new EditContext(client);
+    }
+
+    protected void  SaveClient()
+    {
+        if (editContext!= null && editContext.Validate())
+        {
+
+        }
+
+    }
+
+    protected void Cancel()
+    {
+        NavigateToHome();
+    }
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
